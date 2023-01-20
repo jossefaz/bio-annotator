@@ -15,8 +15,8 @@ jobs:
           python-version: 3.9
       - name: Install dependencies
         run: |
-          pip install pipenv
-          pipenv install --dev
+          pip install poetry
+          poetry install
       - name: Run tests
         run: |
           pipenv run pytest
