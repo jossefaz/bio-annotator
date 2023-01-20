@@ -1,14 +1,15 @@
 import asyncio
 import os
 
+from aiofiles import os as aios
+
 from schemas.variants import Variant
 
 
 class AsyncAnnotator:
-    def __init__(self, annotator_name, variant: Variant, file_path=None):
+    def __init__(self, annotator_name, file_path=''):
         self.annotator_name = annotator_name
         self.file_path = file_path
-        self.variant = variant
 
     @classmethod
     @property
@@ -24,14 +25,13 @@ class AsyncAnnotator:
 
     async def __aenter__(self):
         self.annotator = self.create_annotator(self.annotator_name)
-        self.file_path = self.variant.to_vcf()
         return self.annotator
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         if os.path.exists(self.file_path):
-            await aiof.os.remove(self.file_path)
+            await aios.remove(self.file_path)
 
-    async def annotate(self, *args, **kwargs):
+    async def annotate_batch(self, *args, **kwargs):
         process = await asyncio.create_subprocess_exec(
             self.executable_bin,
             *args,
@@ -40,4 +40,8 @@ class AsyncAnnotator:
         )
         stdout, stderr = await process.communicate()
         return stdout, stderr
+
+    async def annotate_one(self, variant: Variant, *args, **kwargs):
+        self.file_path = variant.to_vcf()
+        return await self.annotate_batch(*args, **kwargs)
 

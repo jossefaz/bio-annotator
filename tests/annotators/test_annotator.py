@@ -9,7 +9,7 @@ class TestAsyncAnnotator:
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize("annotator", AsyncAnnotator.__subclasses__())
-    async def test_create_annotator_valid_name(self, annotator):
+    async def test_create_annotator_valid_name(self, annotator, variant_schema_factory):
         annotator_impl = AsyncAnnotator.create_annotator(annotator.__name__)
         assert isinstance(annotator_impl, annotator)
 
@@ -23,7 +23,7 @@ class TestAsyncAnnotator:
     async def test_async_annotator_context_manager_valid_name(self, annotator):
         async with AsyncAnnotator(annotator.__name__) as annotator_impl:
             assert isinstance(annotator_impl, annotator)
-            await annotator_impl.annotate(f"{annotator_impl} works as expected")
+            await annotator_impl.annotate_batch(f"{annotator_impl} works as expected")
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize("annotator", AsyncAnnotator.__subclasses__())
@@ -31,7 +31,7 @@ class TestAsyncAnnotator:
         async with AsyncAnnotator(annotator.__name__) as annotator_impl:
             assert isinstance(annotator_impl, annotator)
             monkeypatch.setattr(annotator_impl, 'executable_bin', "echo")
-            stdout, stderr = await annotator_impl.annotate(f"{annotator_impl} works as expected")
+            stdout, stderr = await annotator_impl.annotate_batch(f"{annotator_impl} works as expected")
             assert f"{annotator_impl} works as expected" in str(stdout)
 
     @pytest.mark.asyncio

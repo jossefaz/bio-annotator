@@ -1,1 +1,0 @@
-from test.fixtures.variant import variant_schema_factory

@@ -1,0 +1,27 @@
+name: Tests on Pull Request
+
+on:
+  push:
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: PRE Test  run docker-compose
+        run: docker-compose up -d
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          python -m pip install pip==22.0.4
+          pip install pipenv
+          pipenv install --system --deploy --dev
+      - name: Run tests
+        env:
+          EMG_ENV: test
+        run: |
+          pipenv run pytest
