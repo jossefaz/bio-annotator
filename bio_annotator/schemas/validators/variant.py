@@ -3,8 +3,8 @@ from common.bioutils.chromosome import Chromosome
 from common.bioutils.chromosome import get_chromosome
 from common.exceptions import ChomosomeRangeError
 from common.exceptions import InvalidChromosomeError
-from common.exceptions import PayloadError
-from schemas.variants import Variant
+from bio_annotator.common.exceptions import PayloadError
+from bio_annotator.schemas.variants import Variant
 
 
 def validation_error_handler(validator):

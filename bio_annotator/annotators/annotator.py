@@ -3,7 +3,7 @@ import os
 
 from aiofiles import os as aios
 
-from schemas.variants import Variant
+from bio_annotator.schemas.variants import Variant
 
 
 class AsyncAnnotator:

@@ -4,12 +4,12 @@ from uuid import uuid4
 import aiofiles
 from pydantic import BaseModel
 
-from common.constants import VCF_COLUMNS
-from common.constants import VCF_HEADERS
-from common.types import HumanReference
-from common.types import REF_ALT_NUCL
-from common.types import VariantTypeEnum
-from common.types import Chromosome as ChromosomeRegex
+from bio_annotator.common.constants import VCF_COLUMNS
+from bio_annotator.common.constants import VCF_HEADERS
+from bio_annotator.common.types import HumanReference
+from bio_annotator.common.types import REF_ALT_NUCL
+from bio_annotator.common.types import VariantTypeEnum
+from bio_annotator.common.types import Chromosome as ChromosomeRegex
 
 
 class VariantOptions(BaseModel):

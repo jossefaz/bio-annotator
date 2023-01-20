@@ -5,10 +5,10 @@ from functools import cached_property
 from typing import List
 from typing import Union
 
-from common.bioutils.assembly import AssemblyEnum
-from common.bioutils.iscn.cytobands.cytoband import Cytoband
-import common.bioutils.iscn.cytobands.grch_37 as cyto37
-import common.bioutils.iscn.cytobands.grch_38 as cyto38
+from bio_annotator.common.bioutils.assembly import AssemblyEnum
+from bio_annotator.common.bioutils.iscn.cytobands.cytoband import Cytoband
+import bio_annotator.common.bioutils.iscn.cytobands.grch_37 as cyto37
+import bio_annotator.common.bioutils.iscn.cytobands.grch_38 as cyto38
 
 REFSEQ_ZFILL = 6
 nucleotides = ['A', 'C', 'T', 'G']
