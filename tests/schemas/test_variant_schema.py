@@ -1,7 +1,7 @@
 import pytest
 
-from common.constants import VCF_COLUMNS
-from common.constants import VCF_HEADERS
+from bio_annotator.common.constants import VCF_COLUMNS
+from bio_annotator.common.constants import VCF_HEADERS
 
 
 @pytest.mark.asyncio

@@ -1,4 +1,4 @@
-from annotators.annotator import AsyncAnnotator
+from bio_annotator.annotators.annotator import AsyncAnnotator
 
 
 class Nirvana(AsyncAnnotator):

@@ -1,8 +1,6 @@
 import pytest
 
-from annotators import Nirvana
-from annotators import VEP
-from annotators.annotator import AsyncAnnotator
+from bio_annotator.annotators.annotator import AsyncAnnotator
 
 
 class TestAsyncAnnotator:
