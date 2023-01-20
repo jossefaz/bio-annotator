@@ -382,18 +382,6 @@ files = [
 six = ">=1.5"
 
 [[package]]
-name = "pyyaml"
-version = "3.11"
-description = "YAML parser and emitter for Python"
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "PyYAML-3.11.tar.gz", hash = "sha256:c36c938a872e5ff494938b33b14aaa156cb439ec67548fcab3535bb78b0846e8"},
-    {file = "PyYAML-3.11.zip", hash = "sha256:19bb3ac350ef878dda84a62d37c7d5c17a137386dde9c2ce7249c7a21d7f6ac9"},
-]
-
-[[package]]
 name = "requests"
 version = "2.28.1"
 description = "Python HTTP for Humans."
@@ -520,4 +508,4 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "cd7721ca41e6e0aaecba51edd877f7e83b766736062cf76771b15ed28f96595b"
+content-hash = "5cd75c4821acc73b1b0b99b2e22030c47c5c3e91cfee0628922bbe0d6d9900c7"
