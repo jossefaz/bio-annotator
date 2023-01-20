@@ -6,7 +6,7 @@ on:
 jobs:
   tests:
     name: Tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.9
@@ -18,7 +18,5 @@ jobs:
           pip install pipenv
           pipenv install --dev
       - name: Run tests
-        env:
-          EMG_ENV: test
         run: |
           pipenv run pytest
