@@ -1,11 +1,7 @@
-import asyncio
-import logging
 import re
 from collections import defaultdict
 from dataclasses import dataclass
 from functools import cached_property
-from functools import reduce
-from operator import concat
 from typing import List
 from typing import Union
 
@@ -13,11 +9,6 @@ from common.bioutils.assembly import AssemblyEnum
 from common.bioutils.iscn.cytobands.cytoband import Cytoband
 import common.bioutils.iscn.cytobands.grch_37 as cyto37
 import common.bioutils.iscn.cytobands.grch_38 as cyto38
-from gzip import GzipFile
-from io import BytesIO
-import shutil
-from ftplib import FTP
-from pathlib import Path
 
 REFSEQ_ZFILL = 6
 nucleotides = ['A', 'C', 'T', 'G']

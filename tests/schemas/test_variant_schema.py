@@ -1,9 +1,8 @@
-import os
 import pytest
 
 from common.constants import VCF_COLUMNS
 from common.constants import VCF_HEADERS
-from schemas.variants import Variant
+
 
 @pytest.mark.asyncio
 async def test_to_vcf(tmpdir, variant_schema_factory):
