@@ -18,9 +18,10 @@ class TestAsyncAnnotator:
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize("annotator", AsyncAnnotator.__subclasses__())
-    async def test_async_annotator_context_manager_valid_name(self, annotator):
+    async def test_async_annotator_context_manager_valid_name(self, annotator, monkeypatch):
         async with AsyncAnnotator(annotator.__name__) as annotator_impl:
             assert isinstance(annotator_impl, annotator)
+            monkeypatch.setattr(annotator_impl, 'executable_bin', 'echo')
             await annotator_impl.annotate_batch(f"{annotator_impl} works as expected")
 
     @pytest.mark.asyncio

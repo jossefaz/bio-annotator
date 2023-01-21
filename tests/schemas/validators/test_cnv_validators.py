@@ -1,4 +1,6 @@
 import pytest
+
+from bio_annotator.common.exceptions import PayloadError
 from bio_annotator.common.types import VariantTypeEnum
 from bio_annotator.common.exceptions import ChomosomeRangeError
 from bio_annotator.schemas.variant import Variant
@@ -16,7 +18,7 @@ def test_create_variant_CNV_end_validator_bigger_than_range(variant_type):
     payload = Variant(variant_type=variant_type, chromosome=chrom,
                       human_reference="GRCh37", start=start_val, end=end_val, ref="A")
     validator = VariantValidator(payload).get_validator()
-    with pytest.raises(ValueError) as excinfo:
+    with pytest.raises(PayloadError) as excinfo:
         validator.validate()
     chromosome_range = validator.get_chromosome().max_range
     end_value_error = ChomosomeRangeError(chromosome_msg=chrom,
@@ -31,7 +33,7 @@ def test_create_variant_CNV_start_validator_bigger_than_end(variant_type):
     chrom = "6"
     start_val = 171115061
     end_val = 171115060
-    with pytest.raises(ValueError) as excinfo:
+    with pytest.raises(PayloadError) as excinfo:
         payload = Variant(variant_type=variant_type, chromosome=chrom,
                                 human_reference="GRCh37", start=start_val, end=end_val, ref="A")
         validator = VariantValidator(payload).get_validator()

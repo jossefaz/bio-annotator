@@ -5,7 +5,6 @@ from bio_annotator.common.exceptions import SnvPayloadError
 from bio_annotator.common.exceptions import ChomosomeRangeError
 from bio_annotator.schemas.variant import Variant
 from bio_annotator.schemas.validators.variant import VariantValidator
-from bio_annotator.schemas.validators.variant import validation_error_handler
 
 @dataclass
 class ValidationMessages:
@@ -22,7 +21,6 @@ class SUBValidator(VariantValidator):
     def variant_type(cls):
         return VariantTypeEnum.SNV
 
-    @validation_error_handler
     def validate(self):
         self.validate_end()
         self.validate_alt()

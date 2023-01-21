@@ -24,7 +24,6 @@ class Variant(BaseModel):
     end: Optional[int]
     ref: REF_ALT_NUCL
     alt: Optional[REF_ALT_NUCL]
-    version: Optional[int]
     options: Optional[VariantOptions] = VariantOptions()
 
     @property

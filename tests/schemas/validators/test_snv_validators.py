@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import patch
 from pydantic import ValidationError
 
+from bio_annotator.common.exceptions import PayloadError
 from bio_annotator.common.types import VariantTypeEnum
 from bio_annotator.common.exceptions import ChomosomeRangeError
 from bio_annotator.common.exceptions import SnvPayloadError
@@ -27,7 +28,7 @@ def test_create_variant_SNV_end_validator_fail():
     start_val = 171115066
     end_val = 171115067
     chrom = "6"
-    with pytest.raises(ValueError) as excinfo:
+    with pytest.raises(PayloadError) as excinfo:
         payload = Variant(variant_type=VariantTypeEnum.SNV, chromosome=chrom,
                                 human_reference="GRCh37", start=start_val, end=end_val, ref="A")
         VariantValidator(payload).get_validator().validate()
@@ -39,7 +40,7 @@ def test_create_variant_snv_and_cnv_start_validator_bigger_than_range(variant_sc
     start_val = 171115070
     end_val = 171115078
     chrom = "6"
-    with pytest.raises(ValueError) as excinfo:
+    with pytest.raises(PayloadError) as excinfo:
         payload = variant_schema_factory(variant_type=variant_type, chromosome=chrom,
                                                 human_reference="GRCh37", start=start_val, end=end_val, ref="A")
         validator = VariantValidator(payload).get_validator()
@@ -66,7 +67,7 @@ def test_create_variant_INDEL_start_validator_bigger_than_end(variant_type, vari
     validator = VariantValidator(variant_payload).get_validator()
     chromosome = validator.get_chromosome()
     variant_payload.start = chromosome.max_range + 1
-    with pytest.raises(ValueError) as excinfo:
+    with pytest.raises(PayloadError) as excinfo:
         validator.validate()
     end_value_error = ChomosomeRangeError(chromosome_msg=chromosome.chromosome,
                                           max_range_msg=chromosome.max_range,
@@ -88,7 +89,7 @@ def test_create_variant_SMALL_INS_and_SNV_validator_raise_when_ref_greater_than_
     validator = VariantValidator(variant_payload).get_validator()
     chromosome = validator.get_chromosome()
     variant_payload.start = chromosome.max_range + 1
-    with pytest.raises(ValueError) as excinfo:
+    with pytest.raises(PayloadError) as excinfo:
         validator.validate()
     assert str(excinfo.value) == f"SNV Variant wrong payload : {expected_message}"
 

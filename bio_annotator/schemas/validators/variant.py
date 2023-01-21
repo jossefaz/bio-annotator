@@ -6,17 +6,6 @@ from bio_annotator.common.exceptions import InvalidChromosomeError
 from bio_annotator.common.exceptions import PayloadError
 from bio_annotator.schemas.variant import Variant
 
-
-def validation_error_handler(validator):
-    def variant_validator_handler(*args, **kwargs):
-        try:
-            return validator(*args, **kwargs)
-        except (PayloadError, ChomosomeRangeError) as ve:
-            raise ValueError(ve.message)
-
-    return variant_validator_handler
-
-
 class VariantValidator:
 
     def __init__(self, variant_schema: Variant):

@@ -3,7 +3,6 @@ from bio_annotator.common.exceptions import CnvPayloadError
 from bio_annotator.common.exceptions import ChomosomeRangeError
 from bio_annotator.schemas.variant import Variant
 from bio_annotator.schemas.validators.variant import VariantValidator
-from bio_annotator.schemas.validators.variant import validation_error_handler
 
 
 class DELValidator(VariantValidator):
@@ -16,7 +15,6 @@ class DELValidator(VariantValidator):
     def variant_type(cls):
         return VariantTypeEnum.DEL
 
-    @validation_error_handler
     def validate(self):
         self.validate_alt()
         self.validate_start()
