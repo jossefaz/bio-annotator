@@ -51,12 +51,6 @@ def test_create_variant_snv_and_cnv_start_validator_bigger_than_range(variant_sc
     assert str(excinfo.value) == start_value_error.message
 
 
-
-
-
-@pytest.mark.variant
-@pytest.mark.integration
-@pytest.mark.service
 def test_create_variant_wrong_variant_type_sent(variant_schema_factory):
     create_variant_payload = variant_schema_factory()
     create_variant_payload.variant_type = "NOT_EXIST_TYPE"
