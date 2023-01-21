@@ -1,5 +1,5 @@
-from common.bioutils.iscn.cytobands.cytoband import Cytoband
-from common.bioutils.iscn.cytobands.cytoband import CytobandTypeEnum
+from bio_annotator.common.bioutils.iscn.cytobands.cytoband import Cytoband
+from bio_annotator.common.bioutils.iscn.cytobands.cytoband import CytobandTypeEnum
 
 chromosome_1 = [
     Cytoband(CytobandTypeEnum.p, range(1, 2300000), 3, 6, 33),

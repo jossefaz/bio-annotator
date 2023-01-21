@@ -1,10 +1,10 @@
 
-from common.bioutils.chromosome import Chromosome
-from common.bioutils.chromosome import get_chromosome
-from common.exceptions import ChomosomeRangeError
-from common.exceptions import InvalidChromosomeError
+from bio_annotator.common.bioutils.chromosome import Chromosome
+from bio_annotator.common.bioutils.chromosome import get_chromosome
+from bio_annotator.common.exceptions import ChomosomeRangeError
+from bio_annotator.common.exceptions import InvalidChromosomeError
 from bio_annotator.common.exceptions import PayloadError
-from bio_annotator.schemas.variants import Variant
+from bio_annotator.schemas.variant import Variant
 
 
 def validation_error_handler(validator):
@@ -38,7 +38,7 @@ class VariantValidator:
         return self.variant_schema
 
     def get_chromosome(self) -> Chromosome:
-        mapped_chromosome = get_chromosome(self.variant_schema.chromosome)
-        if mapped_chromosome:
-            return getattr(mapped_chromosome, self.variant_schema.human_reference)
-        raise InvalidChromosomeError()
+        chromosome = get_chromosome(self.variant_schema.chromosome)
+        if not chromosome:
+            raise InvalidChromosomeError()
+        return chromosome
