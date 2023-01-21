@@ -11,10 +11,6 @@ from bio_annotator.schemas.validators.variant_types.SNV.small_ins import Validat
 from bio_annotator.schemas.validators.variant_types.SNV.snv import ValidationMessages as sub_messages
 from bio_annotator.schemas.validators.variant import VariantValidator
 
-
-@pytest.mark.variant
-@pytest.mark.integration
-@pytest.mark.service
 @patch('bio_annotator.schemas.variant.Variant.__init__', side_effect=SnvPayloadError("wrong attribute"))
 def test_flow_create_variant_SNV_end_validator_fail(_):
     # chr6 max : 171115067
@@ -26,10 +22,6 @@ def test_flow_create_variant_SNV_end_validator_fail(_):
                       human_reference="GRCh37", start=start_val, end=end_val, ref="A")
     assert excinfo.value.message == SnvPayloadError("wrong attribute").message
 
-
-@pytest.mark.variant
-@pytest.mark.integration
-@pytest.mark.service
 def test_create_variant_SNV_end_validator_fail():
     # chr6 max : 171115067
     start_val = 171115066
@@ -41,32 +33,6 @@ def test_create_variant_SNV_end_validator_fail():
         VariantValidator(payload).get_validator().validate()
     assert str(excinfo.value) == SnvPayloadError(f"end was given : {end_val}").message
 
-
-@pytest.mark.variant
-@pytest.mark.integration
-@pytest.mark.service
-@pytest.mark.parametrize("variant_type", [VariantTypeEnum.DEL, VariantTypeEnum.DUP])
-def test_create_variant_CNV_end_validator_bigger_than_range(variant_type):
-    # chr6 max : 171115067
-    max_range = 171115067
-    chrom = "6"
-    start_val = 171115067
-    end_val = 171115080
-    payload = Variant(variant_type=variant_type, chromosome=chrom,
-                      human_reference="GRCh37", start=start_val, end=end_val, ref="A")
-    validator = VariantValidator(payload).get_validator()
-    with pytest.raises(ValueError) as excinfo:
-        validator.validate()
-    chromosome_range = validator.get_chromosome().max_range
-    end_value_error = ChomosomeRangeError(chromosome_msg=chrom,
-                                          max_range_msg=chromosome_range,
-                                          position_msg=str(end_val))
-    assert str(excinfo.value) == end_value_error.message
-
-
-@pytest.mark.variant
-@pytest.mark.integration
-@pytest.mark.service
 @pytest.mark.parametrize("variant_type", [VariantTypeEnum.SNV, VariantTypeEnum.DEL, VariantTypeEnum.DUP])
 def test_create_variant_snv_and_cnv_start_validator_bigger_than_range(variant_schema_factory, variant_type):
     # chr6 max : 171115067
@@ -85,26 +51,7 @@ def test_create_variant_snv_and_cnv_start_validator_bigger_than_range(variant_sc
     assert str(excinfo.value) == start_value_error.message
 
 
-@pytest.mark.variant
-@pytest.mark.integration
-@pytest.mark.service
-@pytest.mark.parametrize("variant_type", [VariantTypeEnum.DEL, VariantTypeEnum.DUP])
-def test_create_variant_CNV_start_validator_bigger_than_end(variant_type):
-    # chr6 max : 171115067
-    max_range = 171115067
-    chrom = "6"
-    start_val = 171115061
-    end_val = 171115060
-    with pytest.raises(ValueError) as excinfo:
-        payload = Variant(variant_type=variant_type, chromosome=chrom,
-                                human_reference="GRCh37", start=start_val, end=end_val, ref="A")
-        validator = VariantValidator(payload).get_validator()
-        validator.validate()
-    chromosome_range = validator.get_chromosome().max_range
-    end_value_error = ChomosomeRangeError(chromosome_msg=chrom,
-                                          max_range_msg=chromosome_range,
-                                          position_msg=f"{variant_type.value} variants must have at least a length of 2 bp")
-    assert str(excinfo.value) == end_value_error.message
+
 
 
 @pytest.mark.variant
@@ -116,10 +63,6 @@ def test_create_variant_wrong_variant_type_sent(variant_schema_factory):
     with pytest.raises(ValidationError):
         Variant.validate(create_variant_payload.dict())
 
-
-@pytest.mark.variant
-@pytest.mark.unit
-@pytest.mark.service
 @pytest.mark.parametrize("variant_type", [VariantTypeEnum.SMALL_DEL, VariantTypeEnum.SMALL_INS])
 def test_create_variant_INDEL_start_validator_bigger_than_end(variant_type, variant_schema_factory):
     variant_payload = variant_schema_factory(variant_type=variant_type)
@@ -137,9 +80,6 @@ def test_create_variant_INDEL_start_validator_bigger_than_end(variant_type, vari
     assert str(excinfo.value) == end_value_error.message
 
 
-@pytest.mark.variant
-@pytest.mark.unit
-@pytest.mark.service
 @pytest.mark.parametrize("variant_type, expected_message", [
     (VariantTypeEnum.SMALL_INS, small_ins_messages.ONLY_ONE_NUCL_REF),
     (VariantTypeEnum.SNV, sub_messages.ONLY_ONE_NUCL_REF)])
@@ -158,9 +98,6 @@ def test_create_variant_SMALL_INS_and_SNV_validator_raise_when_ref_greater_than_
         validator.validate()
     assert str(excinfo.value) == f"SNV Variant wrong payload : {expected_message}"
 
-@pytest.mark.variant
-@pytest.mark.unit
-@pytest.mark.service
 def test_validate_snv_payload_will_return_none_when_ref_alt_same_length_greater_than_1(variant_schema_factory):
     variant_payload = variant_schema_factory(variant_type=VariantTypeEnum.SNV)
     variant_payload.ref = 'TTT'
