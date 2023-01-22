@@ -39,7 +39,9 @@ ENV PYTHONUNBUFFERED=1
 # activate virtual environment
 ENV VIRTUAL_ENV=/home/annotator-user/bio_annotator/venv
 ENV PATH="/home/annotator-user/bio_annotator/venv/bin:$PATH"
-
+ENV NIRVANA_EXC="dotnet"
+ENV NIRVANA_DATA="/scratch"
+ENV NIRVANA_BIN="/opt/nirvana/Nirvana.dll"
 # /dev/shm is mapped to shared memory and should be used for gunicorn heartbeat
 # this will improve performance and avoid random freezes
 CMD ["gunicorn","-b", "0.0.0.0:5000", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "--worker-tmp-dir", "/dev/shm", "--chdir", "/home/annotator-user/", "server:app"]

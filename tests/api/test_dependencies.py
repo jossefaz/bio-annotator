@@ -1,0 +1,15 @@
+import pytest
+from fastapi import HTTPException
+
+from bio_annotator.annotators.annotator import AsyncAnnotator
+from bio_annotator.api.annotation.v1.common.dependencies import validate_annotator_name
+
+
+@pytest.mark.parametrize("annotator", AsyncAnnotator.__subclasses__())
+def test_validate_annotator_name_will_return_annotator_name_if_subclass_of_async_annotator(annotator):
+    assert validate_annotator_name(annotator.__name__.lower()) == annotator.__name__.lower()
+
+
+def test_validate_annotator_name_will_raise_404_if_not_subclass_of_async_annotator():
+    with pytest.raises(HTTPException) as exc:
+        validate_annotator_name('blabla')

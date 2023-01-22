@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+from typing import List
+
 
 @dataclass
 class ErrorContent:
@@ -6,12 +8,15 @@ class ErrorContent:
     error_code: int
     message: str
 
+
 @dataclass
 class ErrorMessages:
     INVALID_CHROMOSOME = ErrorContent(code=400, error_code=1, message="Invalid chromosome during validation")
     CNV_INVALID_PAYLOAD = ErrorContent(code=400, error_code=2, message="CNV Variant wrong payload")
     SNV_INVALID_PAYLOAD = ErrorContent(code=400, error_code=3, message="SNV Variant wrong payload")
     CHROMOSOME_RANGE_ERROR = ErrorContent(code=400, error_code=4, message="Chromosome range out of bound error")
+    ANNOTATOR_CONFIGURATION_ERROR = ErrorContent(code=500, error_code=5,
+                                                 message="At least one of the mandatory setting for annotator is missing")
 
 
 class BioAnnotatorError(Exception):
@@ -40,14 +45,14 @@ class CnvPayloadError(PayloadError):
 
     def __init__(self, param=None):
         super().__init__(ErrorMessages.CNV_INVALID_PAYLOAD)
-        self.message = f"{ErrorMessages.CNV_INVALID_PAYLOAD.message} : {str(param)}"
+        self.message = f"{self.message} : {str(param)}"
 
 
 class SnvPayloadError(PayloadError):
 
     def __init__(self, param=None):
         super().__init__(ErrorMessages.SNV_INVALID_PAYLOAD)
-        self.message = f"{ErrorMessages.SNV_INVALID_PAYLOAD.message} : {str(param)}"
+        self.message = f"{self.message} : {str(param)}"
 
 
 class ChomosomeRangeError(PayloadError):
@@ -60,4 +65,11 @@ class ChomosomeRangeError(PayloadError):
             max_range_msg = f"max_range={max_range_msg}"
         if position_msg:
             position_msg = f"position={position_msg}"
-        self.message = f"{ErrorMessages.CHROMOSOME_RANGE_ERROR.message} : {chromosome_msg}, {max_range_msg}, {position_msg}"
+        self.message = f"{self.message} : {chromosome_msg}, {max_range_msg}, {position_msg}"
+
+
+class AnnotatorConfigurationMissingError(BioAnnotatorError):
+
+    def __init__(self, annotator_name: str):
+        super().__init__(ErrorMessages.ANNOTATOR_CONFIGURATION_ERROR)
+        self.message = f"{self.message} : {annotator_name}"
