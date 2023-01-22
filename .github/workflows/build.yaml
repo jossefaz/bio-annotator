@@ -1,0 +1,23 @@
+name: Build and Test Docker Image
+
+on:
+  push:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build Docker Image
+      run: docker build -t bio-annotator:latest .
+
+    - name: Test Docker Image - Nirvana Annotator
+      run: |
+        docker run bio-annotator:latest dotnet /opt/nirvana/Downloader.dll
+
+    - name: Test Docker Image - VEP Annotator
+      run: |
+        docker run bio-annotator:latest vep
