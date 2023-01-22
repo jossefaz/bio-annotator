@@ -17,6 +17,7 @@ class ErrorMessages:
     CHROMOSOME_RANGE_ERROR = ErrorContent(code=400, error_code=4, message="Chromosome range out of bound error")
     ANNOTATOR_CONFIGURATION_ERROR = ErrorContent(code=500, error_code=5,
                                                  message="At least one of the mandatory setting for annotator is missing")
+    FILE_MISSING_ERROR = ErrorContent(code=400, error_code=6, message="Input file for annotator was not found")
 
 
 class BioAnnotatorError(Exception):
@@ -72,4 +73,11 @@ class AnnotatorConfigurationMissingError(BioAnnotatorError):
 
     def __init__(self, annotator_name: str):
         super().__init__(ErrorMessages.ANNOTATOR_CONFIGURATION_ERROR)
+        self.message = f"{self.message} : {annotator_name}"
+
+
+class FileMissingError(BioAnnotatorError):
+
+    def __init__(self, annotator_name: str):
+        super().__init__(ErrorMessages.FILE_MISSING_ERROR)
         self.message = f"{self.message} : {annotator_name}"

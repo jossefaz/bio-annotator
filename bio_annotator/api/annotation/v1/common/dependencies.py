@@ -17,8 +17,17 @@ def validate_variant_payload(payload: Variant):
     validated_payload = VariantValidator(payload).get_validator().validate()
     return validated_payload
 
+
 def validate_annotator_name(annotator_name: str):
     if annotator_name not in [a.__name__.lower() for a in AsyncAnnotator.__subclasses__()]:
         raise HTTPException(status.HTTP_404_NOT_FOUND,
                             detail=f"Annotator : '{annotator_name}' does not exists or is not supported")
     return annotator_name
+
+
+def validate_assembly(assembly: str):
+    if assembly not in ['GRCh38', 'GRCh37']:
+        raise HTTPException(status.HTTP_404_NOT_FOUND,
+                            detail=f"Assembly : '{assembly}' does not exists or is not supported. "
+                                   f"Possible values are : GRCh38 or GRCh37")
+    return assembly

@@ -21,16 +21,20 @@ class TestAsyncAnnotator:
     async def test_async_annotator_context_manager_valid_name(self, annotator, monkeypatch):
         async with AsyncAnnotator(annotator.__name__) as annotator_impl:
             assert isinstance(annotator_impl, annotator)
-            monkeypatch.setattr(annotator_impl, 'executable_bin', 'echo')
-            await annotator_impl.annotate_batch(f"{annotator_impl} works as expected")
+            monkeypatch.setattr(annotator, 'ensure_file_exists', lambda self: True)
+            monkeypatch.setattr(annotator_impl, 'executable', 'echo')
+            monkeypatch.setattr(annotator_impl, 'bin', f"{annotator_impl} works as expected")
+            await annotator_impl.annotate_batch()
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize("annotator", AsyncAnnotator.__subclasses__())
     async def test_async_annotator_annotate_execute_async_cli(self, annotator, monkeypatch):
         async with AsyncAnnotator(annotator.__name__) as annotator_impl:
             assert isinstance(annotator_impl, annotator)
-            monkeypatch.setattr(annotator_impl, 'executable_bin', "echo")
-            stdout, stderr = await annotator_impl.annotate_batch(f"{annotator_impl} works as expected")
+            monkeypatch.setattr(annotator, 'ensure_file_exists', lambda self: True)
+            monkeypatch.setattr(annotator_impl, 'executable', "echo")
+            monkeypatch.setattr(annotator_impl, 'bin', f"{annotator_impl} works as expected")
+            stdout, stderr = await annotator_impl.annotate_batch()
             assert f"{annotator_impl} works as expected" in str(stdout)
 
     @pytest.mark.asyncio

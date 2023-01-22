@@ -3,6 +3,7 @@ import os
 
 from aiofiles import os as aios
 
+from bio_annotator.common.exceptions import FileMissingError
 from bio_annotator.schemas.variant import Variant
 
 
@@ -11,15 +12,29 @@ class AsyncAnnotator:
         self.annotator_name = annotator_name
         self.output_file = ''
         self.input_file = ''
+        self._human_reference = 'GRCh37'
 
     @classmethod
     @property
-    def executable_bin(cls):
+    def executable(cls):
+        return 'echo "ERROR: AsyncAnnotator called directly"'
+
+    @classmethod
+    @property
+    def bin(cls):
         return 'echo "ERROR: AsyncAnnotator called directly"'
 
     @classmethod
     def sanity_check(cls):
         NotImplemented("To be implemented only in child classes")
+
+    @property
+    def human_reference(self):
+        return self._human_reference
+
+    @human_reference.setter
+    def human_reference(self, new_ref):
+        self._human_reference = new_ref
 
     @classmethod
     def create_annotator(cls, annotator_name):
@@ -36,9 +51,15 @@ class AsyncAnnotator:
         if os.path.exists(self.input_file):
             await aios.remove(self.input_file)
 
+    def ensure_file_exists(self):
+        if not self.input_file or not os.path.isfile(self.input_file):
+            raise FileMissingError(self.__class__.__name__)
+        return self.input_file
+
     async def annotate_batch(self, *args, **kwargs):
         process = await asyncio.create_subprocess_exec(
-            self.executable_bin,
+            self.executable,
+            self.bin,
             *args,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE
