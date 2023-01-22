@@ -28,6 +28,6 @@ async def annotate_file(annotator_name: str, assembly: str, file):
         await f.write(file)
     async with AsyncAnnotator(annotator_name) as annotator:
         annotator.human_reference = assembly
-        annotator.input_file = file
-        annotator.annotate_batch()
-    return {"filename": f"cache/{file_name}.vcf"}
+        annotator.input_file = f"cache/{file_name}.vcf.gz"
+        await annotator.annotate_batch()
+        return annotator.output_file

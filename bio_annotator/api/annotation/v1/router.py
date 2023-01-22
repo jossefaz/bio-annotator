@@ -6,12 +6,14 @@ from fastapi import Depends
 from fastapi import File
 from fastapi import Path
 from starlette import status
+from starlette.responses import StreamingResponse
 
 from bio_annotator.api.annotation.v1.common.dependencies import validate_annotator_name
 from bio_annotator.api.annotation.v1.common.dependencies import validate_assembly
 from bio_annotator.api.annotation.v1.common.dependencies import validate_variant_payload
 from bio_annotator.api.annotation.v1.common.routes import RoutesRegistry
 from bio_annotator.api.annotation.v1.controller import annotate_file
+from bio_annotator.common.file_utils import byte_file_iterator
 from bio_annotator.schemas.variant import Variant
 from bio_annotator.api.annotation.v1.controller import annotate_variant
 
@@ -30,4 +32,6 @@ async def annotate_single_variant(annotator_name: str = Depends(validate_annotat
 async def annotate_batch(annotator_name: str = Depends(validate_annotator_name),
                          assembly: str = Depends(validate_assembly),
                          file: bytes = File(..., media_type="text/vcf,application/vcf")):
-    return await annotate_file(file)
+    output_file = await annotate_file(annotator_name, assembly, file)
+    return StreamingResponse(byte_file_iterator(output_file), media_type="application/octet-stream",
+                             headers={"Content-Disposition": f"attachment; filename={output_file}"})
