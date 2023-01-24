@@ -16,8 +16,8 @@ jobs:
 
     - name: Test Docker Image - Nirvana Annotator
       run: |
-        docker run bio-annotator:latest dotnet /opt/nirvana/Downloader.dll
+        docker run bio-annotator:latest dotnet /opt/nirvana/Nirvana.dll --help
 
     - name: Test Docker Image - VEP Annotator
       run: |
-        docker run bio-annotator:latest vep
+        docker run bio-annotator:latest vep --help
